@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano Popular Sol Nascente Saudável | PICAPS Fiocruz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Teal and Amber accents -->
+    <!-- Application Structure Plan: A single-page, scrollable application with a fixed navigation bar. The structure is thematic, guiding the user through a narrative journey: 1. **Hero/Intro:** Captures attention with key results. 2. **O Desafio:** Uses cards and charts to present the stark reality and inequalities of Sol Nascente. 3. **A Resposta PICAPS:** Explains the platform's innovative approach. 4. **Diagnóstico Participativo:** Details the community-led research (cartography and interviews) with interactive charts. 5. **Ações em Andamento:** Showcases concrete projects (Dengue control, Community Garden) with a tab-based interface for GTs. 6. **Voz e Incidência:** Presents the policy proposals. 7. **Parceria:** A clear call to action. This structure enhances understanding by first establishing the problem, then presenting the solution, the evidence, the actions, and the future, making it highly persuasive for potential partners. -->
+    <!-- Visualization & Content Choices: 1. **Key Stats (Desafio):** Goal: Inform/Compare. Method: Cards with large numbers and icons (HTML/Tailwind) for quick impact. Justification: Easily digestible and highlights the scale of the problem. 2. **Demographics/Inequality (Desafio/Diagnóstico):** Goal: Compare. Method: Bar and Doughnut charts (Chart.js) to compare Sol Nascente with DF. Interaction: Tooltips on hover. Justification: Visually effective for showing disparities. 3. **Risks/Vulnerabilities (Diagnóstico):** Goal: Organize. Method: Clickable cards (HTML/JS) revealing details. Justification: Interactive and avoids overwhelming the user with text. 4. **Interview Data (Diagnóstico):** Goal: Inform/Explore. Method: Interactive bar charts (Chart.js) that can be filtered or updated. Justification: Allows partners to explore the specific needs identified by the community. 5. **GT Actions (Ações):** Goal: Organize/Inform. Method: Tabbed interface (HTML/JS) to switch between GTs (Mulheres, Juventude, Comunicação). Justification: Organizes a large amount of information cleanly. 6. **Policy Proposals (Voz e Incidência):** Goal: Inform. Method: Accordion list (HTML/JS). Justification: Presents dense information in a structured, expandable format. All charts are rendered on Canvas via Chart.js, confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #3f3f46;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 40vh;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0d9488; /* Teal-600 */
+            border-bottom-color: #0d9488;
+        }
+        .card-stat-icon {
+            background-color: #ecfdf5; /* Teal-50 */
+            color: #0d9488; /* Teal-600 */
+        }
+        .tab-button.active {
+            background-color: #0d9488;
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="w-10 h-10 bg-teal-600 rounded-full flex items-center justify-center text-white font-bold text-lg">P</span>
+                <span class="text-xl font-bold text-gray-800">PICAPS Fiocruz</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#desafio" class="nav-link text-gray-600 font-medium border-b-2 border-transparent">O Desafio</a>
+                <a href="#diagnostico" class="nav-link text-gray-600 font-medium border-b-2 border-transparent">Diagnóstico</a>
+                <a href="#acoes" class="nav-link text-gray-600 font-medium border-b-2 border-transparent">Ações</a>
+                <a href="#incidencia" class="nav-link text-gray-600 font-medium border-b-2 border-transparent">Incidência</a>
+                <a href="#parceria" class="bg-teal-600 text-white px-4 py-2 rounded-full hover:bg-teal-700 transition-colors">Seja Parceiro</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#desafio" class="block py-2 text-gray-600">O Desafio</a>
+            <a href="#diagnostico" class="block py-2 text-gray-600">Diagnóstico</a>
+            <a href="#acoes" class="block py-2 text-gray-600">Ações</a>
+            <a href="#incidencia" class="block py-2 text-gray-600">Incidência</a>
+            <a href="#parceria" class="block mt-2 bg-teal-600 text-white text-center px-4 py-2 rounded-full">Seja Parceiro</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Hero Section -->
+        <section class="text-center mb-24">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Plano Popular Sol Nascente Saudável</h1>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-8">Inovação e Cooperação para Transformar o Território mais Desigual do Distrito Federal.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                    <p class="text-3xl font-bold text-teal-600">497</p>
+                    <p class="text-sm text-gray-500">Entrevistas Realizadas</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                    <p class="text-3xl font-bold text-teal-600">20</p>
+                    <p class="text-sm text-gray-500">Pesquisadores Populares</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                    <p class="text-3xl font-bold text-teal-600">1º</p>
+                    <p class="text-sm text-gray-500">Território do DF com EDLs</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                    <p class="text-3xl font-bold text-amber-600">350+</p>
+                    <p class="text-sm text-gray-500">Marmitas/Semana</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Challenge Section -->
+        <section id="desafio" class="mb-24 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">O Coração do Desafio</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">O Sol Nascente/Pôr do Sol é um paradoxo: coexiste com o maior IDH do Brasil, mas enfrenta precariedade extrema, revelando a face mais dura da desigualdade.</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center card-stat-icon">
+                            <span class="text-2xl">💧</span>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-gray-800">29%</p>
+                            <p class="text-gray-500">sem acesso a esgoto</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600">A ausência de saneamento básico é um risco diário à saúde, com esgoto a céu aberto (35%) e alagamentos (44%) sendo comuns.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                     <div class="flex items-center gap-4 mb-3">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center card-stat-icon">
+                             <span class="text-2xl">🏥</span>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-gray-800">94%</p>
+                            <p class="text-gray-500">dependem do SUS</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600">Com apenas 1 UBS e nenhum hospital, 89% dos atendimentos são feitos em Ceilândia, sobrecarregando o sistema.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                     <div class="flex items-center gap-4 mb-3">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center card-stat-icon">
+                            <span class="text-2xl">🌾</span>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-gray-800">12,7%</p>
+                            <p class="text-gray-500">em fome constante</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600">A insegurança alimentar grave afeta uma parcela significativa da população, que sobrevive com renda média de R$915,50.</p>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+                <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">Desigualdade em Números</h3>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container">
+                        <canvas id="escolaridadeChart"></canvas>
+                    </div>
+                    <div class="text-gray-600">
+                        <p class="mb-4">O abismo educacional é um dos principais fatores da desigualdade. Enquanto no DF quase 40% dos adultos têm ensino superior, no Sol Nascente este número cai para apenas 6,7%.</p>
+                        <p>Essa disparidade limita as oportunidades e perpetua o ciclo de pobreza. A ausência de escolas de ensino médio na RA agrava o problema, forçando 90% dos jovens a se deslocarem para estudar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The PICAPS Response Section -->
+        <section id="picaps" class="mb-24 scroll-mt-20 bg-teal-600 text-white rounded-2xl p-8 md:p-12">
+            <div class="grid md:grid-cols-3 gap-8 items-center">
+                <div class="md:col-span-1 text-center">
+                    <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-5xl">💡</span>
+                    </div>
+                    <h2 class="text-3xl font-bold">A Resposta PICAPS</h2>
+                </div>
+                <div class="md:col-span-2">
+                    <p class="text-lg mb-4">A **Plataforma de Inteligência de Desenvolvimento Cooperativo com Atenção Primária à Saúde (PICAPS)** é a resposta da Fiocruz a este cenário. Mais que uma ferramenta, é um ecossistema de inovação que conecta comunidade, academia e gestão pública.</p>
+                    <p class="mb-4">Através do **Radar de Territórios, Formação, Inteligência Epidemiológica e Transformação Digital**, a PICAPS promove o desenvolvimento cooperativo de soluções, alinhada aos Objetivos de Desenvolvimento Sustentável (ODS) e à Agenda 2030.</p>
+                    <p class="font-semibold">Nosso objetivo: fortalecer a integração da atenção primária e vigilância em saúde, usando tecnologia e participação social para construir territórios mais justos e saudáveis.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Participatory Diagnosis Section -->
+        <section id="diagnostico" class="mb-24 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Diagnóstico Participativo</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">A inteligência de desenvolvimento cooperativo em ação. Mapeamos o território e ouvimos a comunidade para construir um plano fundamentado na realidade local.</p>
+            
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100 mb-12">
+                 <h3 class="text-2xl font-bold text-center mb-2 text-gray-800">A Voz da Comunidade: Entrevistas no Trecho 3</h3>
+                 <p class="text-center text-gray-500 mb-6">Resultados das 143 entrevistas que revelam as urgências do território.</p>
+                 <div class="chart-container h-[400px] max-h-[50vh]">
+                     <canvas id="necessidadesChart"></canvas>
+                 </div>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+                 <h3 class="text-2xl font-bold text-center mb-2 text-gray-800">Cartografia Social: Riscos e Resiliências</h3>
+                 <p class="text-center text-gray-500 mb-8">Identificamos 59 fatores de risco e resiliência. Clique para explorar.</p>
+                <div id="cartografia-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Cards will be injected here by JavaScript -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Actions in Progress Section -->
+        <section id="acoes" class="mb-24 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Ações em Andamento</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">Do diagnóstico à ação. Projetos concretos que já estão transformando a realidade do Sol Nascente.</p>
+
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="w-full md:w-1/3">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Mobilização e Engajamento</h3>
+                        <p class="text-gray-600 mb-6">A implementação das ações é liderada por Grupos de Trabalho (GTs) que articulam a comunidade, gestores e especialistas. Selecione um GT para ver suas ações.</p>
+                        <div id="tabs-container" class="flex flex-col space-y-2">
+                             <!-- Tabs will be injected here by JavaScript -->
+                        </div>
+                    </div>
+                    <div id="tab-content-container" class="w-full md:w-2/3 bg-gray-50 p-6 rounded-lg min-h-[300px]">
+                        <!-- Content will be injected here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advocacy and Proposals Section -->
+        <section id="incidencia" class="mb-24 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Voz e Incidência Política</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">A mobilização comunitária resultou em uma carta entregue à Ministra da Saúde e à Secretária de Saúde do DF, com propostas concretas para superar as lacunas sistêmicas.</p>
+            
+            <div class="max-w-4xl mx-auto space-y-4" id="propostas-container">
+                 <!-- Accordion items will be injected by JavaScript -->
+            </div>
+        </section>
+
+
+        <!-- Partnership Section -->
+        <section id="parceria" class="scroll-mt-20 text-center bg-white rounded-2xl p-8 md:p-12 shadow-2xl border border-gray-100">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Junte-se a Nós. Seja um Parceiro.</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-8">O Plano Popular Sol Nascente Saudável é um modelo escalável de transformação social. Sua colaboração é fundamental para expandir nosso impacto através de apoio financeiro, expertise técnica ou replicação do modelo.</p>
+            <a href="mailto:picaps.fiocruz@example.com" class="bg-teal-600 text-white font-bold px-8 py-4 rounded-full text-lg hover:bg-teal-700 transition-transform hover:scale-105 inline-block">Entre em Contato</a>
+        </section>
+
+    </main>
+    
+    <footer class="bg-gray-800 text-white mt-24">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2025 Fiocruz Brasília - Plataforma de Inteligência de Desenvolvimento Cooperativo com Atenção Primária à Saúde (PICAPS).</p>
+            <p class="text-sm text-gray-400 mt-2">Construindo territórios saudáveis, sustentáveis e solidários.</p>
+        </div>
+    </footer>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Mobile Menu
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Navigation scrollspy
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 80) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // Chart Data
+    const escolaridadeData = {
+        labels: ['Superior Completo', 'Até Ensino Médio'],
+        datasets: [{
+            label: 'População Adulta (+24 anos)',
+            data: [6.7, 93.3],
+            backgroundColor: ['#f59e0b', '#d1d5db'], // Amber-500, Gray-300
+            borderColor: '#f8f7f4',
+            borderWidth: 2,
+            name: 'Sol Nascente'
+        }, {
+            label: 'População Adulta (+24 anos)',
+            data: [37, 63],
+            backgroundColor: ['#10b981', '#d1d5db'], // Emerald-500, Gray-300
+            borderColor: '#f8f7f4',
+            borderWidth: 2,
+            name: 'Distrito Federal'
+        }]
+    };
+
+    const necessidadesData = {
+        labels: ['Delegacia', 'UBS', 'Hospital', 'Escola de Ensino Médio'],
+        datasets: [{
+            label: '% dos Entrevistados que consideram urgente',
+            data: [63, 54, 48, 44],
+            backgroundColor: ['#0d9488', '#14b8a6', '#5eead4', '#99f6e4'], // Teal shades
+            borderColor: '#064e3b',
+            borderWidth: 1,
+            borderRadius: 5,
+        }]
+    };
+
+    // Chart Initialization
+    if (document.getElementById('escolaridadeChart')) {
+        new Chart(document.getElementById('escolaridadeChart'), {
+            type: 'doughnut',
+            data: escolaridadeData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            generateLabels: function(chart) {
+                                return [{
+                                    text: 'Sol Nascente',
+                                    fillStyle: '#f59e0b',
+                                    strokeStyle: '#f59e0b',
+                                    fontColor: '#3f3f46'
+                                }, {
+                                    text: 'Distrito Federal',
+                                    fillStyle: '#10b981',
+                                    strokeStyle: '#10b981',
+                                    fontColor: '#3f3f46'
+                                }];
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Nível de Escolaridade: Sol Nascente vs. DF (%)',
+                        padding: { top: 10, bottom: 20 }
+                    },
+                     tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.name || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.formattedValue + '% (' + context.label + ')';
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    }
+
+    if (document.getElementById('necessidadesChart')) {
+        new Chart(document.getElementById('necessidadesChart'), {
+            type: 'bar',
+            data: necessidadesData,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: false },
+                    tooltip: {
+                         callbacks: {
+                            label: function(context) {
+                                return ` ${context.formattedValue}% consideram urgente`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 70,
+                        ticks: {
+                            callback: function(value) { return value + '%' }
+                        }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    // Cartografia Social Data & Logic
+    const cartografiaData = [
+        { title: 'Ameaças', icon: '⚡️', count: 6, details: 'Fatores externos com potencial negativo: infraestrutura inadequada, insegurança alimentar e desafios no acesso à água e saneamento.' },
+        { title: 'Vulnerabilidades', icon: '💔', count: 21, details: 'Condições internas que expõem a população a riscos: contaminação do solo e água, economia frágil, acesso limitado a tecnologias e saúde precária.' },
+        { title: 'Resiliências', icon: '🌱', count: 9, details: 'Capacidades da comunidade para superar desafios: forte organização comunitária, sistemas sustentáveis de produção de alimentos e redes de apoio mútuo.' }
+    ];
+    
+    const cartografiaContainer = document.getElementById('cartografia-container');
+    cartografiaData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-gray-50 p-6 rounded-lg cursor-pointer hover:shadow-xl hover:scale-105 transition-transform';
+        card.innerHTML = `
+            <div class="flex items-center justify-between mb-3">
+                <h4 class="text-xl font-bold text-gray-700">${item.title}</h4>
+                <span class="text-3xl">${item.icon}</span>
+            </div>
+            <p class="text-gray-600">${item.details}</p>
+            <p class="text-right font-bold text-teal-600 mt-4">${item.count} fatores mapeados</p>
+        `;
+        cartografiaContainer.appendChild(card);
+    });
+
+    // GT Tabs Data & Logic
+    const gtData = {
+        mulheres: {
+            title: 'GT Mulheres',
+            icon: '👩‍👧‍👦',
+            content: `
+                <h4 class="text-xl font-bold mb-3">Liderança Feminina na Saúde Comunitária</h4>
+                <p class="mb-2"><strong>Objetivo:</strong> Expor sobre o combate à dengue, Zika e Chikungunya, orientar sobre sintomas e acesso a serviços de saúde, e levantar dados para a carta à Ministra da Saúde.</p>
+                <p class="mb-4"><strong>Ações Realizadas:</strong></p>
+                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                    <li>Encontros em 4 locais diferentes (Coletivo Mulheres do Sol, Casa da Natureza, Ecosol, Cozinha do MTD) em Outubro de 2024.</li>
+                    <li>Demonstração prática do uso das Estações Disseminadoras de Larvicida (EDLs).</li>
+                    <li>Coleta de relatos e demandas que fundamentaram as propostas de políticas públicas.</li>
+                </ul>`
+        },
+        juventude: {
+            title: 'GT Juventude',
+            icon: '🧑‍🎤',
+            content: `
+                <h4 class="text-xl font-bold mb-3">Engajando a Nova Geração</h4>
+                <p class="mb-2"><strong>Objetivo:</strong> Dialogar com jovens e professores sobre as ações de saúde, convidando-os para a mobilização e engajando-os na campanha de prevenção.</p>
+                 <p class="mb-4"><strong>Ações Realizadas:</strong></p>
+                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                    <li>Visitas a escolas de Ensino Médio e Fundamental (CEM 12 e CEF 28) em Outubro de 2024.</li>
+                    <li>Produção de material em vídeo com alunos para divulgação em redes sociais.</li>
+                    <li>Realização de "cirandas" com jovens e crianças para explicar a campanha de forma lúdica.</li>
+                </ul>`
+        },
+        comunicacao: {
+            title: 'GT Comunicação',
+            icon: '📡',
+            content: `
+                <h4 class="text-xl font-bold mb-3">Amplificando a Mensagem</h4>
+                <p class="mb-2"><strong>Objetivo:</strong> Produzir e disseminar materiais informativos para garantir o alcance e engajamento da comunidade na campanha de prevenção.</p>
+                <p class="mb-4"><strong>Ações Realizadas:</strong></p>
+                 <ul class="list-disc list-inside space-y-2 text-gray-600">
+                    <li>Produção de <strong>3.000 cartilhas</strong>, <strong>1.000 cartazes</strong> e 1 vídeo explicativo.</li>
+                    <li>Distribuição dos materiais para coletivos, instituições e grupos de WhatsApp.</li>
+                    <li>Proposta de documentário para registrar e divulgar a iniciativa para outros territórios.</li>
+                </ul>`
+        }
+    };
+
+    const tabsContainer = document.getElementById('tabs-container');
+    const tabContentContainer = document.getElementById('tab-content-container');
+    
+    Object.keys(gtData).forEach((key, index) => {
+        const tabData = gtData[key];
+        const button = document.createElement('button');
+        button.className = 'tab-button w-full text-left p-4 rounded-lg transition-colors flex items-center gap-4';
+        button.dataset.tab = key;
+        button.innerHTML = `<span class="text-2xl">${tabData.icon}</span> <span class="font-semibold">${tabData.title}</span>`;
+        
+        if (index === 0) {
+            button.classList.add('active');
+            tabContentContainer.innerHTML = tabData.content;
+        }
+
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            tabContentContainer.innerHTML = gtData[key].content;
+        });
+
+        tabsContainer.appendChild(button);
+    });
+
+    // Proposals Accordion Data & Logic
+    const propostasData = [
+        { title: 'Melhorar Assistência Básica', content: 'Providenciar mais médicos e profissionais para as UBSs, em número suficiente para atender a alta demanda do Sol Nascente/Pôr do Sol.' },
+        { title: 'Construir Infraestrutura Local', content: 'Construir uma UBS no Trecho 3, uma casa de parto e um CAPS para atender o território, suprindo a ausência total desses equipamentos.' },
+        { title: 'Fortalecer Agentes Comunitários', content: 'Ampliar o número de Agentes Comunitários de Saúde (ACS) e de endemias, garantindo que atuem exclusivamente em suas funções no território.' },
+        { title: 'Garantir Acesso a Especialistas', content: 'Tornar o fluxo da regulação transparente e realizar mutirões para zerar as filas de espera por especialistas, exames e cirurgias.' },
+        { title: 'Implementar Programas Federais', content: 'Efetivar programas como Brasil Sorridente, Academia da Saúde, Mais Médicos e Saúde na Escola, que atualmente não atendem a população local.' }
+    ];
+
+    const propostasContainer = document.getElementById('propostas-container');
+    propostasData.forEach(item => {
+        const accordionItem = document.createElement('div');
+        accordionItem.className = 'bg-white rounded-lg border border-gray-200';
+        accordionItem.innerHTML = `
+            <button class="accordion-button w-full flex justify-between items-center p-5 text-left font-semibold text-gray-700">
+                <span>${item.title}</span>
+                <svg class="accordion-arrow w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="accordion-content hidden p-5 pt-0 text-gray-600">
+                ${item.content}
+            </div>
+        `;
+        propostasContainer.appendChild(accordionItem);
+    });
+
+    propostasContainer.addEventListener('click', (e) => {
+        const button = e.target.closest('.accordion-button');
+        if (button) {
+            const content = button.nextElementSibling;
+            const arrow = button.querySelector('.accordion-arrow');
+            content.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
