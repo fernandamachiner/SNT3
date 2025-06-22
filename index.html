@@ -43,6 +43,21 @@
             background-color: #0d9488;
             color: white;
         }
+        .logo-header {
+            height: 40px; /* Adjust as needed */
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .footer-logos {
+            height: 30px; /* Smaller for footer */
+            width: auto;
+            object-fit: contain; /* Ensures the image fits without distortion */
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 10px; /* Spacing between logos */
+            filter: invert(100%) brightness(150%); /* Make dark logos visible on dark background */
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -51,7 +66,7 @@
     <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                <span class="w-10 h-10 bg-teal-600 rounded-full flex items-center justify-center text-white font-bold text-lg">P</span>
+                <img src="https://content-fetcher.google-genai.com/api/v1/files/uploaded:4. Logo PICAPS.png-bf3e4c55-3201-44b1-a17b-8fe07beb68ee" alt="Logo PICAPS" class="logo-header" onerror="this.onerror=null;this.src='https://placehold.co/40x40/cccccc/333333?text=PICAPS'">
                 <span class="text-xl font-bold text-gray-800">PICAPS Fiocruz</span>
             </div>
             <div class="hidden md:flex items-center space-x-6">
@@ -242,7 +257,9 @@
     <footer class="bg-gray-800 text-white mt-24">
         <div class="container mx-auto px-6 py-8 text-center">
             <p>&copy; 2025 Fiocruz Brasília - Plataforma de Inteligência de Desenvolvimento Cooperativo com Atenção Primária à Saúde (PICAPS).</p>
-            <p class="text-sm text-gray-400 mt-2">Construindo territórios saudáveis, sustentáveis e solidários.</p>
+            <div class="mt-4 flex flex-wrap justify-center items-center">
+                <img src="https://content-fetcher.google-genai.com/api/v1/files/uploaded:Artboard 1@3x-8 (2) (1).png-21734b87-dc24-4ab9-9185-9beaab9e1aa2" alt="Logos Institucionais" class="footer-logos" onerror="this.onerror=null;this.src='https://placehold.co/150x30/3f3f46/ffffff?text=Parceiros'">
+            </div>
         </div>
     </footer>
 
